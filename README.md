@@ -1,44 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
-## Getting Started
+🚀 Rick and Morty - Conexa 
 
-First, run the development server:
+[![Vercel Status](https://img.shields.io/github/deployments/colomarina/conexa/Production?label=vercel&logo=vercel&color=000)](https://conexa-rick-morty.vercel.app/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Node.js](https://img.shields.io/badge/Node.js-20.18.1-green?logo=node.js)](https://nodejs.org/) [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/) [![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?logo=bootstrap)](https://getbootstrap.com/) [![Tests](https://img.shields.io/badge/tests-Jest-green?logo=jest)](https://jestjs.io/)
+
+**Rick and Morty** es una aplicación frontend construida con **Next.js + TypeScript** que consume la [Rick and Morty API](https://rickandmortyapi.com/) y permite explorar personajes, ver detalles y episodios relacionados.
+
+👉 **Demo en vivo:** [conexa-rick-morty.vercel.app](https://conexa-rick-morty.vercel.app/)
+
+## ✨ Características
+
+- 🌌 Exploración de personajes de Rick and Morty.  
+- 📱 Diseño **responsive** con **Bootstrap**.  
+- 🔍 Vista de detalle de personajes y episodios.  
+- ⚡️ Organización de componentes con **Atomic Design**.  
+- 🔄 Fetch de datos con **Axios**.  
+- 🎯 Tipado fuerte con **TypeScript**.  
+- 🧪 Suite de tests con **Jest**.  
+- ☁️ Despliegue continuo con **Vercel**.
+
+## 🛠 Stack Tecnológico
+
+| Capa / Responsabilidad   | Tecnología usada                     |
+|--------------------------|---------------------------------------|
+| Framework / Base         | Next.js                              |
+| Lenguaje                 | TypeScript                           |
+| Estilos / UI             | Bootstrap + CSS Modules              |
+| Arquitectura       | Atomic Design                        |
+| Peticiones HTTP / API    | Axios + [Rick and Morty API](https://rickandmortyapi.com/) |
+| Estado                   | Context API + Hooks personalizados   |
+| Testing                  | Jest                                 |
+| Despliegue               | Vercel                               |
+
+
+
+
+## 📸 Preview
+
+![Preview de Rick and Morty - Conexa](public/preview.png)
+
+
+---
+
+## 🚀 Instalación y ejecución
 
 ```bash
+# Clonar repositorio
+git clone https://github.com/colomarina/conexa.git
+cd conexa
+
+# Instalar dependencias
+npm install
+
+# Levantar en entorno de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Abrir en navegador
+http://localhost:3000
+
+```
+## 🧪 Correr los tests
+
+Ejecutar test suite con Jest
+
+```bash
+  npm run test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Licencia
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
-
-
-
-https://conexa-kohl.vercel.app/
+Este proyecto está bajo la licencia [MIT](https://choosealicense.com/licenses/mit/)

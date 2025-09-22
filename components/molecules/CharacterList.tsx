@@ -23,6 +23,7 @@ const CharacterList = ({
               image={character.image}
               name={character.name}
               status={character.status}
+              species={character.species}
               onClick={() => onCharacterClick(character)}
               selected={isCharacterSelected(character.id)}
               onModalClick={() => onModalClick(character)}

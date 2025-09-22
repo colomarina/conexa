@@ -1,7 +1,7 @@
-import { createContext, useContext, useReducer } from "react";
-import { toast } from "react-toastify";
+import { createContext, useContext, useReducer } from 'react';
+import { toast } from 'react-toastify';
 
-import { Character } from "types/rickAndMortyTypes";
+import { Character } from 'types/rickAndMortyTypes';
 
 interface CharacterContextType {
   character1: Character | null;
@@ -27,40 +27,42 @@ export const CharacterContext = createContext<CharacterContextType>({
 
 export const useCharacterContext = () => useContext(CharacterContext);
 
-export const characterReducer = (state: CharacterContextType, action: { type: string, payload: Character | null }) => {
-  console.log(state, action)
+export const characterReducer = (
+  state: CharacterContextType,
+  action: { type: string; payload: Character | null }
+) => {
+  console.log(state, action);
   const actions = {
-    setCharacter1: (payload: Character | null) => ({ ...state, character1: payload}),
-    setCharacter2: (payload: Character | null) => ({ ...state, character2: payload}),
-    setCharacter1And2: (payload: Character | null) => ({ ...state, character1And2: payload}),
+    setCharacter1: (payload: Character | null) => ({ ...state, character1: payload }),
+    setCharacter2: (payload: Character | null) => ({ ...state, character2: payload }),
+    setCharacter1And2: (payload: Character | null) => ({ ...state, character1And2: payload }),
   };
-  return (actions[action.type as keyof typeof actions]?.(action.payload)) || state;
-}
-
+  return actions[action.type as keyof typeof actions]?.(action.payload) || state;
+};
 
 export const useCharacterReducer = (defaultValues: CharacterContextType) => {
   const [state, dispatch] = useReducer(characterReducer, defaultValues);
 
   const setCharacter1 = (character: Character) =>
-    dispatch({ type: "setCharacter1", payload: character });
+    dispatch({ type: 'setCharacter1', payload: character });
 
   const cleanCharacter1 = () => {
-    dispatch({ type: "setCharacter1", payload: null });
-    dispatch({ type: "setCharacter1And2", payload: null });
-    toast.success('Se elimino correctamente el personaje 1', { position: 'top-left' })
-  }
-  
+    dispatch({ type: 'setCharacter1', payload: null });
+    dispatch({ type: 'setCharacter1And2', payload: null });
+    toast.success('Se elimino correctamente el personaje 1', { position: 'top-left' });
+  };
+
   const setCharacter2 = (character: Character) =>
-    dispatch({ type: "setCharacter2", payload: character });
-  
+    dispatch({ type: 'setCharacter2', payload: character });
+
   const cleanCharacter2 = () => {
-    dispatch({ type: "setCharacter2", payload: null });
-    dispatch({ type: "setCharacter1And2", payload: null });
-    toast.success('Se elimino correctamente el personaje 2', { position: 'top-right' })
-  }
-  
+    dispatch({ type: 'setCharacter2', payload: null });
+    dispatch({ type: 'setCharacter1And2', payload: null });
+    toast.success('Se elimino correctamente el personaje 2', { position: 'top-right' });
+  };
+
   const setCharacter1And2 = (character: Character) =>
-    dispatch({ type: "setCharacter1And2", payload: character });
+    dispatch({ type: 'setCharacter1And2', payload: character });
 
   return {
     ...state,
@@ -68,6 +70,6 @@ export const useCharacterReducer = (defaultValues: CharacterContextType) => {
     cleanCharacter1,
     setCharacter2,
     cleanCharacter2,
-    setCharacter1And2
+    setCharacter1And2,
   };
 };

@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
@@ -6,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <link rel="icon" href="https://rickandmortyapi.com/favicon-32x32.png" />
-        <title>Rick and Morty</title>
+        <div>Rick and Morty</div>
       </Head>
       <body>
         <Main />

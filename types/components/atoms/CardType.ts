@@ -5,6 +5,7 @@ export interface CardType {
   image: string;
   name: string;
   status: CharacterStatusEnum;
+  species: string;
   onClick: () => void;
   selected?: boolean;
   onModalClick: () => void;

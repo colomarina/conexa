@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
-import { useCharacterContext } from "@contexts/CharacterContext";
-import { useCharacter } from "@hooks/useCharacters";
-import CharacterList from "@molecules/CharacterList";
-import Pagination from "@molecules/Pagination";
+import { useCharacterContext } from '@contexts/CharacterContext';
+import { useCharacter } from '@hooks/useCharacters';
+import CharacterHeader from '@atoms/CharacterHeader';
+import CharacterList from '@molecules/CharacterList';
+import Pagination from '@molecules/Pagination';
+import ModalInfo from '@organisms/ModalInfo';
 
-import { CharactersEnum } from "types/enums";
-import { Character } from "types/rickAndMortyTypes";
-import CharacterHeader from "@atoms/CharacterHeader";
-import ModalInfo from "./ModalInfo";
+import { CharactersEnum } from 'types/enums';
+import { Character } from 'types/rickAndMortyTypes';
 
 interface CharacterConfig {
   title: string;
@@ -20,52 +20,45 @@ interface CharacterConfig {
 }
 
 const CharacterCard = ({ id }: { id: CharactersEnum }) => {
-  const [modalData, setModalData] = useState<Character | null>(null)
-  const {
-    character1,
-    setCharacter1,
-    cleanCharacter1,
-    character2,
-    setCharacter2,
-    cleanCharacter2,
-  } = useCharacterContext();
-  const { characters, info, handlePrev, handleNext, currentPage, totalPages } =
-    useCharacter(id);
+  const [modalData, setModalData] = useState<Character | null>(null);
+  const { character1, setCharacter1, cleanCharacter1, character2, setCharacter2, cleanCharacter2 } =
+    useCharacterContext();
+  const { characters, info, handlePrev, handleNext, currentPage, totalPages } = useCharacter(id);
 
   const handleOnClick = (character: Character) => {
     if (id === CharactersEnum.CHARACTER_ONE) setCharacter1(character);
     if (id === CharactersEnum.CHARACTER_TWO) setCharacter2(character);
     return toast.success(`Personaje ${id} seleccionado con éxito!`, {
-      position: (id === CharactersEnum.CHARACTER_ONE) ? "top-left" : "top-right",
+      position: id === CharactersEnum.CHARACTER_ONE ? 'top-left' : 'top-right',
     });
   };
 
   const selectedCharacters = (characterId: number) => {
     if (id === CharactersEnum.CHARACTER_ONE) {
-      return character1?.id == characterId
+      return character1?.id == characterId;
     } else {
-      return character2?.id == characterId
+      return character2?.id == characterId;
     }
-  }
+  };
 
   const onModalClick = (character: Character) => {
     setModalData(character);
-  }
+  };
 
   const objCharacterHeader: Partial<Record<CharactersEnum, CharacterConfig>> = {
     [CharactersEnum.CHARACTER_ONE]: {
-      title: "Tu Personaje 1",
-      characterName: character1 ? character1.name : "",
+      title: 'Tu Personaje 1',
+      characterName: character1 ? character1.name : '',
       isVisible: Boolean(character1),
       onClick: cleanCharacter1,
-      className: "justify-content-start",
+      className: 'justify-content-start',
     },
     [CharactersEnum.CHARACTER_TWO]: {
-      title: "Tu Personaje 2",
-      characterName: character2 ? character2.name : "",
+      title: 'Tu Personaje 2',
+      characterName: character2 ? character2.name : '',
       isVisible: Boolean(character2),
       onClick: cleanCharacter2,
-      className: "justify-content-start",
+      className: 'justify-content-start',
     },
   };
 
@@ -73,7 +66,7 @@ const CharacterCard = ({ id }: { id: CharactersEnum }) => {
     <>
       <div
         className={`col-md-6 ${
-          id === CharactersEnum.CHARACTER_ONE ? "border-end border-light" : ""
+          id === CharactersEnum.CHARACTER_ONE ? 'border-end border-light' : ''
         }`}
       >
         {objCharacterHeader[id] && (
@@ -102,7 +95,11 @@ const CharacterCard = ({ id }: { id: CharactersEnum }) => {
         />
       </div>
       {modalData && (
-        <ModalInfo character={modalData} isSelected={selectedCharacters(modalData.id)} onClose={() => setModalData(null)} />
+        <ModalInfo
+          character={modalData}
+          isSelected={selectedCharacters(modalData.id)}
+          onClose={() => setModalData(null)}
+        />
       )}
     </>
   );

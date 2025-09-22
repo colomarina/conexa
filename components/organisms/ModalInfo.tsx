@@ -1,7 +1,11 @@
 import React from "react";
+
+import styles from "@styles/components/organisms/ModalInfo.module.css";
+
 import { CharacterStatusEnum } from "types/enums";
 import { Character } from "types/rickAndMortyTypes";
-import styles from "@styles/components/organisms/ModalInfo.module.css";
+
+import { getWritingStatus } from "utilities/helpers";
 
 interface ModalInfoType {
   character: Character;
@@ -51,15 +55,17 @@ const ModalInfo = ({ character, isSelected, onClose }: ModalInfoType) => {
                 <div className="mb-3">
                   <span className="text-light me-2">Estado:</span>
                   <span className={getStatusBadgeClass(character.status)}>
-                    {character.status}
+                    {getWritingStatus(character.status)}
                   </span>
                 </div>
                 <p className="text-light">
                   <strong>Especie:</strong> {character.species}
                 </p>
-                <p className="text-light">
-                  <strong>Tipo:</strong> {character.type}
-                </p>
+                {character.type && (
+                  <p className="text-light">
+                    <strong>Tipo:</strong> {character.type}
+                  </p>
+                )}
                 <p className="text-light">
                   <strong>Ubicación:</strong> {character.location.name}
                 </p>

@@ -13,6 +13,7 @@ const Card = ({
   image,
   name,
   status,
+  species,
   onClick,
   selected = false,
   onModalClick,
@@ -56,18 +57,23 @@ const Card = ({
           </div>
           <div className="col-6">
             <div className="card-body h-100 d-flex flex-column justify-content-between">
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex gap-2 flex-column">
                 <h5 className="card-title text-light text-truncate mb-0">
                   {name}
                 </h5>
+                <div className="d-flex gap-2 text-light mb-2">
+                  <span className="d-block d-md-none">Estado:</span>
+                  <span className={getStatusClass(status)}>
+                    {getWritingStatus(status)}
+                  </span>
+                </div>
               </div>
-              <div className="text-light mb-2">
-                <span className="me-2">Estado:</span>
-                <span className={getStatusClass(status)}>
-                  {getWritingStatus(status)}
-                </span>
+              <div>
+                <div className="d-flex gap-2 text-light mb-2 text-truncate">
+                  <span>Especie:</span>
+                  <span>{species}</span>
+                </div>
               </div>
-
               <div className="d-flex gap-2 align-items-center justify-content-between">
                 <div className="d-flex align-items-center gap-2">
                   <button

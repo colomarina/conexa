@@ -33,7 +33,7 @@ const Episodes = () => {
         episode: getCommonEpisodes(character1, character2),
       });
     }
-  }, [character1, character2]);
+  }, [character1, character2, setCharacter1And2]);
   return (
     <div className="row">
       <EpisodesCard id={CharactersEnum.CHARACTER_ONE} character={character1} />

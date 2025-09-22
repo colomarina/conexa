@@ -12,13 +12,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Esta es la configuración recomendada para CSS Modules
-  cssModules: true,
-  cssLoaderOptions: {
-    modules: {
-      namedExport: false,
-    },
-  },
 };
 
 export default nextConfig;

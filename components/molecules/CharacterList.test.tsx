@@ -1,44 +1,47 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { Character } from 'types/rickAndMortyTypes';
+import { CharacterListType } from 'types/components/molecules/CharacterListType';
+import { CharactersEnum, CharacterStatusEnum } from 'types/enums';
 import CharacterList from './CharacterList';
-import { CharactersEnum, CharacterStatusEnum } from '../../types/enums';
 
 jest.mock('../atoms/Card', () => {
-  return function MockCard({ name, onClick, selected, onModalClick }: {
+  const MockCard: React.FC<{
+    characterId: string;
+    image: string;
     name: string;
+    status: CharacterStatusEnum;
+    species: string;
     onClick: () => void;
     selected?: boolean;
     onModalClick: () => void;
-  }) {
-    return (
-      <div data-testid={`card-${name}`}>
-        <span>{name}</span>
-        <button onClick={onClick}>
-          {selected ? 'Seleccionado' : 'Seleccionar'}
-        </button>
-        <button onClick={onModalClick}>
-          Info
-        </button>
-      </div>
-    );
-  };
+  }> = ({ name, onClick, selected, onModalClick }) => (
+    <div data-testid={`card-${name}`}>
+      <h3>{name}</h3>
+      <button onClick={onClick} data-selected={selected}>
+        {selected ? '★ Seleccionado' : 'Seleccionar'}
+      </button>
+      <button onClick={onModalClick}>Ver detalles</button>
+    </div>
+  );
+  return MockCard;
 });
 
 describe('CharacterList', () => {
-  const mockCharacters = [
+  const mockCharacters: Character[] = [
     {
       id: 1,
       name: 'Rick Sanchez',
       status: CharacterStatusEnum.ALIVE,
       species: 'Human',
       type: '',
-      gender: 'Male' as const,
-      origin: { name: 'Earth', url: '' },
-      location: { name: 'Earth', url: '' },
-      image: 'https://example.com/rick.jpg',
-      episode: [],
-      url: 'https://example.com/character/1',
+      gender: 'Male',
+      origin: { name: 'Earth (C-137)', url: 'https://rickandmortyapi.com/api/location/1' },
+      location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+      episode: ['https://rickandmortyapi.com/api/episode/1'],
+      url: 'https://rickandmortyapi.com/api/character/1',
       created: '2017-11-04T18:48:46.250Z'
     },
     {
@@ -47,21 +50,21 @@ describe('CharacterList', () => {
       status: CharacterStatusEnum.ALIVE,
       species: 'Human',
       type: '',
-      gender: 'Male' as const,
-      origin: { name: 'Earth', url: '' },
-      location: { name: 'Earth', url: '' },
-      image: 'https://example.com/morty.jpg',
-      episode: [],
-      url: 'https://example.com/character/2',
+      gender: 'Male',
+      origin: { name: 'unknown', url: '' },
+      location: { name: 'Citadel of Ricks', url: 'https://rickandmortyapi.com/api/location/3' },
+      image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
+      episode: ['https://rickandmortyapi.com/api/episode/1'],
+      url: 'https://rickandmortyapi.com/api/character/2',
       created: '2017-11-04T18:48:46.250Z'
     }
   ];
 
-  const defaultProps = {
+  const defaultProps: CharacterListType = {
     characters: mockCharacters,
     characterTypeId: CharactersEnum.CHARACTER_ONE,
     onCharacterClick: jest.fn(),
-    isCharacterSelected: jest.fn(() => false),
+    isCharacterSelected: jest.fn((id: number) => id === 1),
     onModalClick: jest.fn(),
   };
 
@@ -69,96 +72,104 @@ describe('CharacterList', () => {
     jest.clearAllMocks();
   });
 
-  it('renderiza todas las cards de personajes', () => {
+  it('renderiza la lista de personajes', () => {
     render(<CharacterList {...defaultProps} />);
     
     expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
     expect(screen.getByText('Morty Smith')).toBeInTheDocument();
   });
 
-  it('no renderiza nada con array vacío', () => {
-    render(<CharacterList {...defaultProps} characters={[]} />);
+  it('maneja lista vacía', () => {
+    const emptyProps: CharacterListType = {
+      ...defaultProps,
+      characters: []
+    };
     
+    render(<CharacterList {...emptyProps} />);
     expect(screen.queryByTestId(/card-/)).not.toBeInTheDocument();
   });
 
-  it('llama onModalClick cuando clickeas el botón Info', () => {
+  it('selecciona personaje correctamente', () => {
     render(<CharacterList {...defaultProps} />);
     
-    const rickCard = screen.getByTestId('card-Rick Sanchez');
-    const infoButton = rickCard.querySelector('button:last-child');
+    const rickButton = screen.getByText('★ Seleccionado');
+    expect(rickButton).toBeInTheDocument();
+
+    const mortyButton = screen.getByText('Seleccionar');
+    expect(mortyButton).toBeInTheDocument();
+  });
+
+  it('llama onCharacterClick con el personaje correcto', () => {
+    render(<CharacterList {...defaultProps} />);
     
-    expect(infoButton).not.toBeNull();
-    fireEvent.click(infoButton!);
+    const selectButtons = screen.getAllByText('Seleccionar');
+    fireEvent.click(selectButtons[0]);
+    
+    expect(defaultProps.onCharacterClick).toHaveBeenCalledWith(mockCharacters[1]);
+    expect(defaultProps.onCharacterClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('llama onModalClick con el personaje correcto', () => {
+    render(<CharacterList {...defaultProps} />);
+    
+    const detailButtons = screen.getAllByText('Ver detalles');
+    fireEvent.click(detailButtons[0]);
     
     expect(defaultProps.onModalClick).toHaveBeenCalledWith(mockCharacters[0]);
+    expect(defaultProps.onModalClick).toHaveBeenCalledTimes(1);
   });
 
-  it('llama onClick cuando clickeas una card', () => {
-    render(<CharacterList {...defaultProps} />);
+  it('actualiza selección cuando cambia isCharacterSelected', () => {
+    const { rerender } = render(<CharacterList {...defaultProps} />);
     
-    const rickCard = screen.getByTestId('card-Rick Sanchez');
-    const rickButton = rickCard.querySelector('button');
-    
-    expect(rickButton).not.toBeNull();
-    fireEvent.click(rickButton!);
-    
-    expect(defaultProps.onCharacterClick).toHaveBeenCalledWith(mockCharacters[0]);
-  });
-
-  it('muestra el estado correcto según isCharacterSelected', () => {
-    const mockIsSelected = jest.fn((id) => id === 1);
-    
-    render(<CharacterList {...defaultProps} isCharacterSelected={mockIsSelected} />);
-    
-    expect(screen.getByText('Seleccionado')).toBeInTheDocument();
+    expect(screen.getByText('★ Seleccionado')).toBeInTheDocument();
     expect(screen.getByText('Seleccionar')).toBeInTheDocument();
-  });
 
-  it('pasa las props correctas a cada Card', () => {
-    render(<CharacterList {...defaultProps} />);
+    const updatedProps: CharacterListType = {
+      ...defaultProps,
+      isCharacterSelected: jest.fn((id: number) => id === 2)
+    };
     
-    expect(screen.getByTestId('card-Rick Sanchez')).toBeInTheDocument();
-    expect(screen.getByTestId('card-Morty Smith')).toBeInTheDocument();
-  });
+    rerender(<CharacterList {...updatedProps} />);
 
-  it('maneja datos corruptos sin romper', () => {
-    const corruptCharacters = [
-      mockCharacters[0],
-      {
-        ...mockCharacters[0],
-        id: 999,
-        name: '',
-        status: CharacterStatusEnum.UNKNOWN,
-      },
-      mockCharacters[1]
-    ];
-
-    render(<CharacterList {...defaultProps} characters={corruptCharacters} />);
+    const selectedButtons = screen.getAllByText('★ Seleccionado');
+    const unselectedButtons = screen.getAllByText('Seleccionar');
     
-    expect(screen.getByText('Rick Sanchez')).toBeInTheDocument();
-    expect(screen.getByText('Morty Smith')).toBeInTheDocument();
-  });
-
-  it('mantiene la navegación por teclado', () => {
-    render(<CharacterList {...defaultProps} />);
-    
-    const buttons = screen.getAllByRole('button');
-    buttons.forEach(button => {
-      expect(button).not.toHaveAttribute('tabIndex', '-1');
-    });
+    expect(selectedButtons).toHaveLength(1);
+    expect(unselectedButtons).toHaveLength(1);
   });
 
   it('renderiza muchos personajes sin problemas', () => {
-    const manyCharacters = Array.from({ length: 10 }, (_, i) => ({
+    const manyCharacters: Character[] = Array.from({ length: 20 }, (_, i) => ({
       ...mockCharacters[0],
       id: i + 1,
-      name: `Character ${i + 1}`
+      name: `Personaje ${i + 1}`
     }));
 
-    render(<CharacterList {...defaultProps} characters={manyCharacters} />);
+    const manyProps: CharacterListType = {
+      ...defaultProps,
+      characters: manyCharacters
+    };
+
+    render(<CharacterList {...manyProps} />);
     
-    expect(screen.getByText('Character 1')).toBeInTheDocument();
-    expect(screen.getByText('Character 10')).toBeInTheDocument();
+    expect(screen.getByText('Personaje 1')).toBeInTheDocument();
+    expect(screen.getByText('Personaje 20')).toBeInTheDocument();
+  });
+
+  it('no se rompe con datos incompletos', () => {
+    const incompleteCharacters: Character[] = [
+      { ...mockCharacters[0], name: '', image: '' },
+      { ...mockCharacters[1], id: 999 }
+    ];
+
+    const incompleteProps: CharacterListType = {
+      ...defaultProps,
+      characters: incompleteCharacters
+    };
+
+    expect(() => {
+      render(<CharacterList {...incompleteProps} />);
+    }).not.toThrow();
   });
 });
