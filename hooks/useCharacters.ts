@@ -10,7 +10,6 @@ import { Character, Info } from "types/rickAndMortyTypes";
 const PAGE_URL = "https://rickandmortyapi.com/api/character";
 
 export const useCharacter = (id: CharactersEnum) => {
-  console.log(PAGE_URL)
   const [characters, setCharacters] = useState<Character[]>([]);
   const [pageUrl, setPageUrl] = useState<string>(`${PAGE_URL}?page=${id}`);
   const [info, setInfo] = useState<Info>({ next: null, prev: null, pages: 1 });

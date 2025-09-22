@@ -31,7 +31,6 @@ export const characterReducer = (
   state: CharacterContextType,
   action: { type: string; payload: Character | null }
 ) => {
-  console.log(state, action);
   const actions = {
     setCharacter1: (payload: Character | null) => ({ ...state, character1: payload }),
     setCharacter2: (payload: Character | null) => ({ ...state, character2: payload }),
