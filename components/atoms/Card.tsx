@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-import styles from "@styles/components/atoms/Card.module.css"
+import styles from "@styles/components/atoms/Card.module.css";
 
 import { getWritingStatus } from "utilities/helpers";
 
@@ -31,9 +31,9 @@ const Card = ({
   return (
     <div key={characterId} className="col-12">
       <div
-        className={`card ${styles.characterCard} ${styles.characterCardHorizontal} ${
-          selected ? "selected" : ""
-        }`}
+        className={`card ${styles.characterCard} ${
+          styles.characterCardHorizontal
+        } ${selected ? styles.selected : ""}`}
         onClick={() => onClick()}
         style={{ cursor: "pointer" }}
       >
@@ -61,7 +61,7 @@ const Card = ({
                   {name}
                 </h5>
               </div>
-              <div className="text-light">
+              <div className="text-light mb-2">
                 <span className="me-2">Estado:</span>
                 <span className={getStatusClass(status)}>
                   {getWritingStatus(status)}
@@ -81,7 +81,7 @@ const Card = ({
                     ℹ️ Info
                   </button>
                   {selected && (
-                    <div className=" m-2">
+                    <div>
                       <span className="badge bg-warning text-dark">⭐</span>
                     </div>
                   )}

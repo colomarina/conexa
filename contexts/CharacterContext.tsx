@@ -47,7 +47,7 @@ export const useCharacterReducer = (defaultValues: CharacterContextType) => {
   const cleanCharacter1 = () => {
     dispatch({ type: "setCharacter1", payload: null });
     dispatch({ type: "setCharacter1And2", payload: null });
-    toast.success('Se elimino correctamente el personaje 1')
+    toast.success('Se elimino correctamente el personaje 1', { position: 'top-left' })
   }
   
   const setCharacter2 = (character: Character) =>
@@ -56,7 +56,7 @@ export const useCharacterReducer = (defaultValues: CharacterContextType) => {
   const cleanCharacter2 = () => {
     dispatch({ type: "setCharacter2", payload: null });
     dispatch({ type: "setCharacter1And2", payload: null });
-    toast.success('Se elimino correctamente el personaje 2')
+    toast.success('Se elimino correctamente el personaje 2', { position: 'top-right' })
   }
   
   const setCharacter1And2 = (character: Character) =>

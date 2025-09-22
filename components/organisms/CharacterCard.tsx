@@ -35,8 +35,8 @@ const CharacterCard = ({ id }: { id: CharactersEnum }) => {
   const handleOnClick = (character: Character) => {
     if (id === CharactersEnum.CHARACTER_ONE) setCharacter1(character);
     if (id === CharactersEnum.CHARACTER_TWO) setCharacter2(character);
-    return toast.success("Character seleccionado con éxito!", {
-      position: "top-center",
+    return toast.success(`Personaje ${id} seleccionado con éxito!`, {
+      position: (id === CharactersEnum.CHARACTER_ONE) ? "top-left" : "top-right",
     });
   };
 

@@ -13,9 +13,9 @@
   box-shadow: 0 10px 30px #00ff4133;
 }
 
-.characterCard.selected {
+.selected {
   border-color: var(--rick-green) !important;
-  box-shadow: 0 0 20px #00ff4166;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
 }
 
 .imageContainer {
