@@ -33,7 +33,8 @@ const Episodes = () => {
         episode: getCommonEpisodes(character1, character2),
       });
     }
-  }, [character1, character2, setCharacter1And2]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [character1, character2]);
   return (
     <div className="row">
       <EpisodesCard id={CharactersEnum.CHARACTER_ONE} character={character1} />
