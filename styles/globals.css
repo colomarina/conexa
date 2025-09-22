@@ -1,42 +1,133 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --rick-green: #00ff41;
+  --morty-yellow: #ffd700;
+  --portal-blue: #00bfff;
+  --space-dark: #0a0a0a;
+  --space-gray: #1a1a1a;
+  --space-light: #2a2a2a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  background: linear-gradient(135deg, var(--space-dark) 0%, var(--space-gray) 50%, var(--space-dark) 100%);
+  min-height: 100vh;
+  color: #ffffff;
+  font-family: "Arial", sans-serif;
+}
+
+.rick-morty-title {
+  font-size: 4rem;
+  font-weight: 900;
+  text-shadow: 0 0 20px #00ff4180; /* rgba(0, 255, 65, 0.5) convertido */
+}
+
+.text-rick {
+  color: var(--rick-green);
+  text-shadow: 0 0 10px var(--rick-green);
+}
+
+.text-morty {
+  color: var(--morty-yellow);
+  text-shadow: 0 0 10px var(--morty-yellow);
+}
+
+.text-portal {
+  color: var(--portal-blue);
+  text-shadow: 0 0 15px var(--portal-blue);
+  animation: portal-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes portal-glow {
+  from {
+    text-shadow: 0 0 15px var(--portal-blue);
+  }
+  to {
+    text-shadow: 0 0 25px var(--portal-blue), 0 0 35px var(--portal-blue);
   }
 }
 
-html,
-body {
-  max-width: 100vw;
+.rick-morty-app {
+  position: relative;
   overflow-x: hidden;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.rick-morty-app::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 80%, #00ff411a 0%, transparent 50%), /* rgba(0, 255, 65, 0.1) convertido */
+    radial-gradient(circle at 80% 20%, #00bfff1a 0%, transparent 50%), /* rgba(0, 191, 255, 0.1) convertido */
+    radial-gradient(circle at 40% 40%, #ffd7000d 0%, transparent 50%); /* rgba(255, 215, 0, 0.05) convertido */
+  pointer-events: none;
+  z-index: -1;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+.btn-outline-light:hover {
+  background-color: var(--rick-green) !important;
+  border-color: var(--rick-green) !important;
+  color: var(--space-dark) !important;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.btn-success {
+  background-color: var(--rick-green) !important;
+  border-color: var(--rick-green) !important;
+  color: var(--space-dark) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+.btn-success:hover {
+  background-color: var(--morty-yellow) !important;
+  border-color: var(--morty-yellow) !important;
+}
+
+.badge.bg-success {
+  background-color: var(--rick-green) !important;
+  color: var(--space-dark) !important;
+}
+
+.badge.bg-danger {
+  background-color: #ff4757 !important;
+}
+
+.badge.bg-secondary {
+  background-color: #747d8c !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rick-morty-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .rick-morty-title {
+    font-size: 2rem;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+  }
+
+  .btn-sm {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+
+  .d-flex.gap-2 .badge {
+    text-align: center;
   }
 }

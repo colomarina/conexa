@@ -1,0 +1,26 @@
+.episodesSection {
+  background: white;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+.episodesSection h6 {
+  font-weight: 600;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.episodeItem {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.episodeItem:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,6 @@
+.scrollableList {
+  max-height: 500px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rick-green) rgba(42, 42, 42, 0.5);
+}

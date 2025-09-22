@@ -1,0 +1,23 @@
+.container {
+  background-color: #000000cc;
+}
+
+.characterCard {
+  background: #2a2a2acc !important;
+  border: 1px solid #ffffff1a !important;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.characterCard:hover {
+  transform: translateY(-5px);
+  background: #2a2a2ae6 !important;
+  border-color: var(--rick-green) !important;
+  box-shadow: 0 10px 30px #00ff4133;
+}
+
+.characterCard.selected {
+  border-color: var(--rick-green) !important;
+  box-shadow: 0 0 20px #00ff4166;
+}

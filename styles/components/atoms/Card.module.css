@@ -1,0 +1,76 @@
+.characterCard {
+  background: #2a2a2acc !important;
+  border: 1px solid #ffffff1a !important;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.characterCard:hover {
+  transform: translateY(-5px);
+  background: #2a2a2ae6 !important;
+  border-color: var(--rick-green) !important;
+  box-shadow: 0 10px 30px #00ff4133;
+}
+
+.characterCard.selected {
+  border-color: var(--rick-green) !important;
+  box-shadow: 0 0 20px #00ff4166;
+}
+
+.imageContainer {
+  width: 125px !important;
+  height: 125px !important;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.characterImageFixed {
+  width: 125px !important;
+  height: 125px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+  display: block !important;
+}
+
+.characterCardHorizontal {
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  min-height: 150px !important;
+  height: 150px !important;
+}
+
+.characterCardHorizontal .card-body {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  height: 150px !important;
+}
+
+@media (max-width: 768px) {
+  .characterCardHorizontal .card-body {
+    padding: 0.75rem 1rem;
+  }
+}
+@media (max-width: 576px) {
+  .rick-morty-title {
+    font-size: 2rem;
+  }
+
+  .characterCardHorizontal .card-body {
+    padding: 0.75rem;
+  }
+
+  .characterCardHorizontal .card-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .characterCardHorizontal .card-body {
+    padding: 0.5rem;
+  }
+}
