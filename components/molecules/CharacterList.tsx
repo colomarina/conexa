@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import Card2 from "@atoms/Card";
+import Card from '@/atoms/Card';
 
-import styles from "@styles/components/molecules/CharacterList.module.css";
+import styles from '@/styles/components/molecules/CharacterList.module.css';
 
-import { CharacterListType } from "types/components/molecules/CharacterListType";
+import { CharacterListType } from '@/types/components/molecules/CharacterListType';
 
 const CharacterList = ({
   characters,
@@ -15,10 +15,10 @@ const CharacterList = ({
 }: CharacterListType) => {
   return (
     <div className={styles.scrollableList}>
-      <div className="row row-gap-3 mx-0 mt-2">
-        {characters.map((character) => (
-          <div className="col-12 col-xl-6" key={character.id}>
-            <Card2
+      <div className='row row-gap-3 mx-0 mt-2'>
+        {characters.map(character => (
+          <div className='col-12 col-xl-6' key={character.id}>
+            <Card
               characterId={characterTypeId}
               image={character.image}
               name={character.name}

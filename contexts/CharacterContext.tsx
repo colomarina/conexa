@@ -1,7 +1,8 @@
-import { createContext, useContext, useReducer } from 'react';
+'use client';
+import { createContext, ReactNode, useContext, useReducer } from 'react';
 import { toast } from 'react-toastify';
 
-import { Character } from 'types/rickAndMortyTypes';
+import { Character } from '@/types/rickAndMortyTypes';
 
 interface CharacterContextType {
   character1: Character | null;
@@ -12,6 +13,7 @@ interface CharacterContextType {
   setCharacter2: (data: Character) => void;
   cleanCharacter2: () => void;
   setCharacter1And2: (data: Character) => void;
+  cleanCharacter1And2: () => void;
 }
 
 export const CharacterContext = createContext<CharacterContextType>({
@@ -23,6 +25,7 @@ export const CharacterContext = createContext<CharacterContextType>({
   setCharacter2: () => null,
   cleanCharacter2: () => null,
   setCharacter1And2: () => null,
+  cleanCharacter1And2: () => null,
 });
 
 export const useCharacterContext = () => useContext(CharacterContext);
@@ -63,6 +66,8 @@ export const useCharacterReducer = (defaultValues: CharacterContextType) => {
   const setCharacter1And2 = (character: Character) =>
     dispatch({ type: 'setCharacter1And2', payload: character });
 
+  const cleanCharacter1And2 = () => dispatch({ type: 'setCharacter1And2', payload: null });
+
   return {
     ...state,
     setCharacter1,
@@ -70,5 +75,24 @@ export const useCharacterReducer = (defaultValues: CharacterContextType) => {
     setCharacter2,
     cleanCharacter2,
     setCharacter1And2,
+    cleanCharacter1And2,
   };
 };
+
+const CharacterProvider = ({ children }: { children: ReactNode }) => {
+  const characterContext = useCharacterReducer({
+    character1: null,
+    character2: null,
+    character1And2: null,
+    setCharacter1: () => null,
+    cleanCharacter1: () => null,
+    setCharacter2: () => null,
+    cleanCharacter2: () => null,
+    setCharacter1And2: () => null,
+    cleanCharacter1And2: () => null,
+  });
+
+  return <CharacterContext.Provider value={characterContext}>{children}</CharacterContext.Provider>;
+};
+
+export default CharacterProvider;

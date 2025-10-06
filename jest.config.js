@@ -9,8 +9,8 @@ const customJestConfig = {
 	testEnvironment: 'jsdom',
 	moduleNameMapper: {
 		'^@/(.*)$': '<rootDir>/$1',
-		'^@styles/(.*)$': '<rootDir>/src/styles/$1',
-		'^@components/(.*)$': '<rootDir>/src/components/$1',
+		'^@/styles/(.*)$': '<rootDir>/styles/$1',
+		'^@/components/(.*)$': '<rootDir>/components/$1',
 	},
 	preset: 'ts-jest',
 };

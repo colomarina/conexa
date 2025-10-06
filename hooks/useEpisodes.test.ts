@@ -1,11 +1,12 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { useEpisodes } from './useEpisodes';
-import { getEpisodes } from '../services/rickAndMortyApi';
-import { Character } from '../types/rickAndMortyTypes';
-import { CharacterStatusEnum } from 'types/enums';
 
-jest.mock('../services/rickAndMortyApi');
-const mockGetEpisodes = getEpisodes as jest.MockedFunction<typeof getEpisodes>;
+import { useEpisodes } from '@/hooks/useEpisodes';
+import { getEpisodesByUrls } from '@/services/rickAndMorty';
+import { CharacterStatusEnum } from '@/types/enums';
+import { Character } from '@/types/rickAndMortyTypes';
+
+jest.mock('@/services/rickAndMorty');
+const mockGetEpisodesByUrls = getEpisodesByUrls as jest.MockedFunction<typeof getEpisodesByUrls>;
 
 describe('useEpisodes hook', () => {
   const mockCharacter: Character = {
@@ -20,120 +21,145 @@ describe('useEpisodes hook', () => {
     image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
     episode: [
       'https://rickandmortyapi.com/api/episode/1',
-      'https://rickandmortyapi.com/api/episode/2'
+      'https://rickandmortyapi.com/api/episode/2',
     ],
     url: 'https://rickandmortyapi.com/api/character/1',
-    created: '2017-11-04T18:48:46.250Z'
+    created: '2017-11-04T18:48:46.250Z',
   };
 
   const mockEpisodes = [
-    { id: 1, name: 'Pilot', episode: 'S01E01' },
-    { id: 2, name: 'Lawnmower Dog', episode: 'S01E02' }
+    {
+      id: 1,
+      name: 'Pilot',
+      episode: 'S01E01',
+      air_date: '2013-12-02',
+      characters: [],
+      url: '',
+      created: '',
+    },
+    {
+      id: 2,
+      name: 'Lawnmower Dog',
+      episode: 'S01E02',
+      air_date: '2013-12-09',
+      characters: [],
+      url: '',
+      created: '',
+    },
   ];
 
   beforeEach(() => {
-    mockGetEpisodes.mockClear();
+    mockGetEpisodesByUrls.mockClear();
   });
 
-  it('inicializa con valores por defecto', () => {
+  it('debe inicializar con valores por defecto cuando no hay personaje', () => {
     const { result } = renderHook(() => useEpisodes(null));
-    
+
     expect(result.current.episodes).toEqual([]);
     expect(result.current.loading).toBe(false);
     expect(result.current.error).toBeNull();
   });
 
-  it('no hace nada si no hay personaje', () => {
-    const { result } = renderHook(() => useEpisodes(null));
-    
-    expect(mockGetEpisodes).not.toHaveBeenCalled();
-    expect(result.current.episodes).toEqual([]);
+  it('no debe hacer fetch si no hay personaje', () => {
+    renderHook(() => useEpisodes(null));
+
+    expect(mockGetEpisodesByUrls).not.toHaveBeenCalled();
   });
 
-  it('carga episodios correctamente', async () => {
-    mockGetEpisodes.mockResolvedValue(mockEpisodes);
-    
+  it('debe cargar episodios correctamente cuando hay un personaje válido', async () => {
+    mockGetEpisodesByUrls.mockResolvedValue(mockEpisodes);
+
     const { result } = renderHook(() => useEpisodes(mockCharacter));
-    
+
     expect(result.current.loading).toBe(true);
     expect(result.current.error).toBeNull();
-    
+
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
-    
+
     expect(result.current.episodes).toEqual(mockEpisodes);
-    expect(mockGetEpisodes).toHaveBeenCalledWith([1, 2]);
+    expect(mockGetEpisodesByUrls).toHaveBeenCalledWith(
+      mockCharacter.episode,
+      expect.any(AbortSignal)
+    );
   });
 
-  it('maneja un solo episodio (no array)', async () => {
-    const singleEpisode = { id: 1, name: 'Pilot', episode: 'S01E01' };
-    mockGetEpisodes.mockResolvedValue(singleEpisode);
-    
-    const { result } = renderHook(() => useEpisodes(mockCharacter));
-    
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-    
-    expect(result.current.episodes).toEqual([singleEpisode]);
-  });
-
-  it('maneja errores del API', async () => {
+  it('debe manejar errores del API correctamente', async () => {
     const errorMessage = 'Network error';
-    mockGetEpisodes.mockRejectedValue(new Error(errorMessage));
-    
+    mockGetEpisodesByUrls.mockRejectedValue(new Error(errorMessage));
+
     const { result } = renderHook(() => useEpisodes(mockCharacter));
-    
+
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
-    
+
     expect(result.current.error).toBe(errorMessage);
     expect(result.current.episodes).toEqual([]);
   });
 
-  it('maneja errores que no son Error objects', async () => {
-    mockGetEpisodes.mockRejectedValue('String error');
-    
+  it('debe ignorar errores de tipo AbortError', async () => {
+    const abortError = new Error('Aborted');
+    abortError.name = 'AbortError';
+    mockGetEpisodesByUrls.mockRejectedValue(abortError);
+
     const { result } = renderHook(() => useEpisodes(mockCharacter));
-    
+
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
-    
-    expect(result.current.error).toBe('Error al cargar episodios');
+
+    expect(result.current.error).toBeNull();
+    expect(result.current.episodes).toEqual([]);
   });
 
-  it('limpia episodios si el personaje no tiene episodes', () => {
+  it('debe limpiar episodios cuando el personaje no tiene episodes', () => {
     const characterWithoutEpisodes = { ...mockCharacter, episode: [] };
-    
+
     const { result } = renderHook(() => useEpisodes(characterWithoutEpisodes));
-    
+
     expect(result.current.episodes).toEqual([]);
-    expect(mockGetEpisodes).not.toHaveBeenCalled();
+    expect(mockGetEpisodesByUrls).not.toHaveBeenCalled();
   });
 
-  it('maneja personajes sin episodios', () => {
-    const characterWithoutEpisodes: Character = { 
-      ...mockCharacter, 
-      episode: [] 
-    };
-    
-    const { result } = renderHook(() => useEpisodes(characterWithoutEpisodes));
-    
-    expect(result.current.episodes).toEqual([]);
-    expect(result.current.loading).toBe(false);
-    expect(mockGetEpisodes).not.toHaveBeenCalled();
+  it('debe abortar el fetch cuando el componente se desmonta', () => {
+    mockGetEpisodesByUrls.mockImplementation(
+      () => new Promise(resolve => setTimeout(() => resolve(mockEpisodes), 1000))
+    );
+
+    const { unmount } = renderHook(() => useEpisodes(mockCharacter));
+
+    unmount();
+
+    // El AbortController debería haber abortado la petición
+    expect(mockGetEpisodesByUrls).toHaveBeenCalledWith(
+      mockCharacter.episode,
+      expect.any(AbortSignal)
+    );
   });
 
-  it('extrae correctamente los números de episodio de las URLs', async () => {
-    mockGetEpisodes.mockResolvedValue(mockEpisodes);
-    
-    renderHook(() => useEpisodes(mockCharacter));
-    
+  it('debe abortar y crear nuevo fetch cuando cambia el personaje', async () => {
+    mockGetEpisodesByUrls.mockResolvedValue(mockEpisodes);
+
+    const { rerender } = renderHook(({ character }) => useEpisodes(character), {
+      initialProps: { character: mockCharacter },
+    });
+
     await waitFor(() => {
-      expect(mockGetEpisodes).toHaveBeenCalledWith([1, 2]);
+      expect(mockGetEpisodesByUrls).toHaveBeenCalledTimes(1);
+    });
+
+    const newCharacter = {
+      ...mockCharacter,
+      id: 2,
+      episode: ['https://rickandmortyapi.com/api/episode/3'],
+    };
+
+    rerender({ character: newCharacter });
+
+    await waitFor(() => {
+      expect(mockGetEpisodesByUrls).toHaveBeenCalledTimes(2);
     });
   });
 });

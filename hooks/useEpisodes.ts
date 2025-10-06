@@ -1,35 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import { Character, Episode } from '@/types/rickAndMortyTypes';
+import { getEpisodesByUrls } from '@/services/rickAndMorty';
 
-import { getEpisodes } from "@services/rickAndMortyApi";
+interface UseEpisodesReturn {
+  episodes: Episode[];
+  loading: boolean;
+  error: string | null;
+}
 
-import { Character, Episode } from "types/rickAndMortyTypes";
-
-export const useEpisodes = (character: Character | null) => {
+export const useEpisodes = (character: Character | null): UseEpisodesReturn => {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!character?.episode) {
-      setEpisodes([])
-      return
-    };
+    if (!character?.episode || character.episode.length === 0) {
+      setEpisodes([]);
+      return;
+    }
+
+    const abortController = new AbortController();
 
     const fetchEpisodes = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
-        const episodeNumbers = character.episode.map((url: string) => parseInt(url.split('/').pop() ?? '0'));
-        if (episodeNumbers.length === 0) {
-          return setEpisodes([])
+        const episodeData = await getEpisodesByUrls(character.episode, abortController.signal);
+        setEpisodes(episodeData);
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          setError(error instanceof Error ? error.message : 'Error');
         }
-        const response = await getEpisodes(episodeNumbers);
-        const normalizeEpisodes = Array.isArray(response) ? response : [response]
-        
-        return setEpisodes(normalizeEpisodes);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Error al cargar episodios');
         return setEpisodes([]);
       } finally {
         setLoading(false);
@@ -37,6 +39,8 @@ export const useEpisodes = (character: Character | null) => {
     };
 
     fetchEpisodes();
+
+    return () => abortController.abort();
   }, [character]);
 
   return { episodes, loading, error };

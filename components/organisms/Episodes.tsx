@@ -1,42 +1,16 @@
-import React, { useEffect } from "react";
+'use client';
+import React from 'react';
 
-import { useCharacterContext } from "@contexts/CharacterContext";
-import EpisodesCard from "@organisms/EpisodesCard"
+import EpisodesCard from '@/organisms/EpisodesCard';
+import { useCommonEpisodes } from '@/hooks/useCommonEpisodes';
 
-import { getCommonEpisodes } from "utilities/helpers";
-
-import { CharactersEnum, CharacterStatusEnum } from "types/enums";
+import { CharactersEnum } from '@/types/enums';
 
 const Episodes = () => {
-  const { character1, character1And2, character2, setCharacter1And2 } = useCharacterContext();
+  const { character1, character2, character1And2 } = useCommonEpisodes();
 
-  useEffect(() => {
-    if (character1 && character2) {
-      setCharacter1And2({
-        id: 0,
-        status: CharacterStatusEnum.UNKNOWN,
-        type: "",
-        gender: "unknown",
-        origin: {
-          name: "",
-          url: "",
-        },
-        created: "",
-        image: "",
-        location: {
-          name: "",
-          url: "",
-        },
-        species: "",
-        url: "",
-        name: `${character1.name} y ${character2.name}`,
-        episode: getCommonEpisodes(character1, character2),
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [character1, character2]);
   return (
-    <div className="row">
+    <div className='row'>
       <EpisodesCard id={CharactersEnum.CHARACTER_ONE} character={character1} />
       <EpisodesCard id={CharactersEnum.CHARACTER_ONE_AND_TWO} character={character1And2} />
       <EpisodesCard id={CharactersEnum.CHARACTER_TWO} character={character2} />
