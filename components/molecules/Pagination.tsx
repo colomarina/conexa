@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { PaginationType } from "types/components/molecules/PaginationType";
+import { PaginationType } from '@/types/components/molecules/PaginationType';
 
 const Pagination = ({
   onPrev,
@@ -9,24 +9,24 @@ const Pagination = ({
   isNextDisabled,
   currentPage,
   totalPages,
-  prevLabel = "< Anterior",
-  nextLabel = "Siguiente >",
+  prevLabel = '< Anterior',
+  nextLabel = 'Siguiente >',
 }: PaginationType) => (
-  <div className="d-flex justify-content-between mt-3">
+  <div className='d-flex justify-content-between mt-3'>
     <button
-      type="button"
-      className="btn btn-outline-light"
+      type='button'
+      className='btn btn-outline-light'
       onClick={onPrev}
       disabled={isPrevDisabled}
     >
       {prevLabel}
     </button>
-    <div className="text-light">
+    <div className='text-light'>
       Página {currentPage} de {totalPages}
     </div>
     <button
-      type="button"
-      className="btn btn-outline-light"
+      type='button'
+      className='btn btn-outline-light'
       onClick={onNext}
       disabled={isNextDisabled}
     >

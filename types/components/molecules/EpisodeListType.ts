@@ -1,4 +1,4 @@
-import { Episode } from "types/rickAndMortyTypes";
+import { Episode } from '@/types/rickAndMortyTypes';
 
 export interface EpisodeListType {
   episodes: Episode[];

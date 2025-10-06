@@ -1,13 +1,13 @@
-import { CharacterStatusEnum } from "./enums";
+import { CharacterStatusEnum } from './enums';
 
 export interface RickAndMortyResponse {
   info: Info;
   results: Character[];
 }
 
- export interface Info {
+export interface Info {
   count?: number;
-  pages?: number;
+  pages: number;
   next: string | null;
   prev: string | null;
 }
@@ -18,7 +18,7 @@ export interface Character {
   status: CharacterStatusEnum;
   species: string;
   type: string;
-  gender: "Male" | "Female" | "Genderless" | "unknown";
+  gender: 'Male' | 'Female' | 'Genderless' | 'unknown';
   origin: CharacterLocation;
   location: CharacterLocation;
   image: string;

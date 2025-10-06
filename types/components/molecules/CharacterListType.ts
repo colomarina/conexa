@@ -1,5 +1,5 @@
-import { CharactersEnum } from "types/enums";
-import { Character } from "types/rickAndMortyTypes";
+import { CharactersEnum } from '@/types/enums';
+import { Character } from '@/types/rickAndMortyTypes';
 
 export interface CharacterListType {
   characters: Character[];

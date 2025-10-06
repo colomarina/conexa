@@ -1,4 +1,4 @@
-import { CharactersEnum, CharacterStatusEnum } from "types/enums";
+import { CharactersEnum, CharacterStatusEnum } from '@/types/enums';
 
 export interface CardType {
   characterId: CharactersEnum;
